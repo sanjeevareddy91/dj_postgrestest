@@ -21,10 +21,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('django_key')
+SECRET_KEY = 'niiz^61i!3w3@yrtuib%x2!1htiaxmb$o)g6)n&ty(lg_448ga'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG')
+DEBUG = True
 
 ALLOWED_HOSTS = ['*','ec2-50-16-224-216.compute-1.amazonaws.com','127.0.0.1','localhost','0.0.0.0',]
 
@@ -81,9 +81,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'dj_postgres_db',
         'USER': 'postgres',
-        'PASSWORD' : config('PG_password'),
+        'PASSWORD' : 'postgres123',
         'PORT' : 5432,
-        'HOST': config('RDS_host'),
+        'HOST': 'dm1eti0ubazulw8.cwydwjx9abq0.us-east-1.rds.amazonaws.com',
     }
 }
 
@@ -121,8 +121,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-AWS_ACCESS_KEY_ID = config('aws_s3_access_key_id')
-AWS_SECRET_ACCESS_KEY = config('aws_s3_secret_access_key')
+AWS_ACCESS_KEY_ID = 'AKIA2CQTZWLLBDYUDSOW'
+AWS_SECRET_ACCESS_KEY = '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'
 AWS_STORAGE_BUCKET_NAME = 'dj-postgres-static'
 AWS_S3_CUSTOM_DOMAIN = 'dj-postgres-static.s3.amazonaws.com'
 AWS_S3_OBJECT_PARAMETERS = { 'CacheControl': 'max-age=86400',}
