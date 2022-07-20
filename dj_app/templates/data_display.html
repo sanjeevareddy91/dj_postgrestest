@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+* {
+  box-sizing: border-box;
+}
+
+button.create_data {
+  display: block;
+  margin-left: auto;
+  margin-right: 0;
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+}
+
+button.edit {
+  display: block;
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+}
+
+
+a{
+    text-decoration: none;
+    color: inherit;
+}
+
+caption.table_name{
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.row {
+  display: flex;
+  margin-left:-5px;
+  margin-right:15px;
+}
+
+.column {
+  padding: 5px;
+  width: 100%;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  border: 1px solid #ddd;
+}
+
+th, td {
+  text-align: left;
+  padding: 16px;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+</style>
+</head>
+<body>
+
+  {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+          <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+  {% endif %}
+<div class="row">
+  <div class="column" style="width: 15%;">
+    <table>
+      <tr>
+        <th>tables</th>
+      </tr>
+      {% for table in table_names %}
+      <tr>
+        <td><a href ="{% url 'display_data' %}?table_name={{table}}">{{table}}</a></td><br>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+  <div class="column">
+    <table style="margin-top:33px;" >
+      <caption class="table_name">{{table_name}}</caption>
+      <tr>
+        {% for field in field_info %}
+          <th>{{field}}</th>
+        {% endfor %}
+      </tr>
+      <tr>
+        {% if action_check != 'edit' %}
+          <form method="POST" action="{% url 'add_data' %}?table_name={{table_name}}">
+            {% csrf_token %}
+
+            {% for field in field_info %}
+              {% if table_name == 'student_details' %}
+                {% if field == 'stu_pin_code' %}
+                  <td><select id="stu_pin_code" name="stu_pin_code" >
+                    <option value="" selected>Select</option>
+                    <option value="{% url 'display_data' %}?table_name=student_address">Add Pin</option>
+                    {% for data1 in address_data%}
+                      {% if data.stu_pin_code.stu_pin_code != data1.stu_pin_code %}
+                          <option value="{{data1.stu_pin_code}}">{{data1.stu_pin_code}}</option>
+                      {% endif %}
+                    {% endfor %}
+                  </select></td>
+                {% elif field == 'stu_branch' %}
+                  <td><select id="stu_branch" name="stu_branch">
+                    <option value="" selected>Select</option>
+                    <option value="{% url 'display_data' %}?table_name=student_branch_details">Add Branch</option>
+                    {% for data2 in branch_data%}
+                      <option value="{{data2.stu_branch}}">{{data2.stu_branch}}</option>
+                    {% endfor %}
+                  </select></td>
+                {% else %}
+                  <td><input type="text" id="{{field}}" name="{{field}}" required></td>
+                {% endif %}
+              {% else %}
+                <td><input type="text" id="{{field}}" name="{{field}}" value="{{data.field}}" required></td>
+
+              {% endif %}
+            {% endfor %}
+            {% if table_name != '' %}
+              <td><input type="submit" value="Add"></td>
+            {% endif %}
+          </form>
+        {% else %}
+          <form method="POST" action="{% url 'edit_table' %}?table_name={{table_name}}">
+            {% csrf_token %}
+
+            {% for field,field_value in field_info.items %}
+              {% if table_name == 'student_details' %}
+                {% if field == 'stu_pin_code' %}
+                  <td><select id="stu_pin_code" name="stu_pin_code" >
+                    <option value="{{field_value}}">{{field_value}}</option>
+                    <option value="{% url 'display_data' %}?table_name=student_address">Add Pin</option>
+
+                    {% for data1 in address_data%}
+                      {% if field_value != data1.stu_pin_code %}
+                          <option value="{{data1.stu_pin_code}}">{{data1.stu_pin_code}}</option>
+                      {% endif %}
+                    {% endfor %}
+                  </select></td>
+                {% elif field == 'stu_branch' %}
+                  <td><select id="stu_branch" name="stu_branch">
+                    <option value="{{field_value}}">{{field_value}}</option>
+                    <option value="{% url 'display_data' %}?table_name=student_branch_details">Add Branch</option>
+                    {% for data2 in branch_data%}
+                      {% if field_value != data2.stu_branch %}
+                          <option value="{{data2.stu_branch}}">{{data2.stu_branch}}</option>
+                      {% endif %}
+                    {% endfor %}
+                  </select></td>
+                {% else %}
+                  {% if field == key_field %}
+                    <td><input type="text" id="{{field}}" name="{{field}}" value="{{field_value}}" readonly></td>
+                  {% else %}
+                    <td><input type="text" id="{{field}}" name="{{field}}" value="{{field_value}}" required></td>
+                  {% endif %}
+                {% endif %}
+              {% else %}
+                {% if field == key_field %}
+                <td><input type="text" id="{{field}}" name="{{field}}" value="{{field_value}}" readonly></td>
+                {% else %}
+                  <td><input type="text" id="{{field}}" name="{{field}}" value="{{field_value}}" required></td>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+            {% if table_name != '' %}
+              <td><input type="submit" value="Update"></td>
+            {% endif %}
+          </form>
+        {% endif %}
+      </tr>
+      {% for ele in data %}
+      <tr>
+        {% for new_data in ele %}
+          <td>{{new_data}}</td>
+        {% endfor %}
+          <td><a href="{% url 'display_data' %}?table_name={{table_name}}&id={{ ele|first }}&action_check=edit"><button>Edit</button></a></td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+
+
+</body>
+</html>
+
+<script>
+  document.getElementById("stu_pin_code").onchange = function() {
+      if (this.selectedIndex===1) {
+          window.location.href = this.value;
+      }        
+  };
+  document.getElementById("stu_branch").onchange = function() {
+      if (this.selectedIndex===1) {
+          window.location.href = this.value;
+      }        
+  };
+</script>

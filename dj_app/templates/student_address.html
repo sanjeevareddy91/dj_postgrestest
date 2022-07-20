@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<style>
+input[type=text], select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input[type=submit] {
+  width: 100%;
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: #45a049;
+}
+
+div {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+</style>
+<body>
+
+{% if table_name == 'student_address' %}
+<div style="width: 30%;">
+  <form method="POST">
+    {% csrf_token %}
+    <label for="std_pin_code">Std Pin Code</label>
+    {% if data %}
+        <input type="text" id="std_pin_code" name="std_pin_code" placeholder="Your Pin Code.." value="{{data.stu_pin_code}}" readonly>
+    {% else %}
+        <input type="text" id="std_pin_code" name="std_pin_code" placeholder="Your Pin Code.." value="{{data.stu_pin_code}}">
+    {% endif %}
+    <label for="std_state">Std State</label>
+    <input type="text" id="std_state" name="std_state" placeholder="Your Std State.." value="{{data.stu_state}}">
+
+    <label for="student_city">Std City</label>
+    <input type="text" id="student_city" name="student_city" placeholder="Your Std City.." value="{{data.student_city}}">
+
+    <input type="submit" value="Submit">
+  </form>
+</div>
+{% endif %}
+
+{% if table_name == 'student_branch_details' %}
+<div style="width: 30%;">
+  <form method="POST">
+    {% csrf_token %}
+    <label for="stu_branch">Std Branch</label>
+    {% if data %}
+        <input type="text" id="stu_branch" name="stu_branch" placeholder="Your Branch.." value="{{data.stu_branch}}" readonly>
+    {% else %}
+        <input type="text" id="stu_branch" name="stu_branch" placeholder="Your Branch..">
+    {% endif %}
+    <label for="subjects">Subjects</label>
+    <input type="text" id="subjects" name="subjects" placeholder="Your Subjects.." value="{{data.subjects}}">
+
+    <label for="credits">Credits</label>
+    <input type="text" id="credits" name="credits" placeholder="Your Credits.." value="{{data.credits}}">
+
+    <!-- <label for="country">Country</label>
+    <select id="country" name="country">
+      <option value="australia">Australia</option>
+      <option value="canada">Canada</option>
+      <option value="usa">USA</option>
+    </select> -->
+  
+    <input type="submit" value="Submit">
+  </form>
+</div>
+{% endif %}
+
+{% if table_name == 'student_details' %}
+<div style="width: 30%;">
+  <form method="POST">
+    {% csrf_token %}
+    <label for="stu_id">Std ID</label>
+    {% if data %}
+        <input type="text" id="stu_id" name="stu_id" placeholder="Your Stu ID.." value="{{data.stu_id}}" readonly>
+    {% else %}
+        <input type="text" id="stu_id" name="stu_id" placeholder="Your Stu ID..">
+    {% endif %}
+    <label for="stu_name">Stu Name</label>
+    <input type="text" id="stu_name" name="stu_name" placeholder="Your Stu Name.." value="{{data.stu_name}}">
+
+    <label for="stu_pin_code">Stu Pin Code</label>
+    <select id="stu_pin_code" name="stu_pin_code">
+        <option value="{{data.stu_pin_code.stu_pin_code}}">{{data.stu_pin_code.stu_pin_code}}</option>
+      {% for data1 in address_data%}
+        {% if data.stu_pin_code.stu_pin_code != data1.stu_pin_code %}
+            <option value="{{data1.stu_pin_code}}">{{data1.stu_pin_code}}</option>
+        {% endif %}
+      {% endfor %}
+    </select>
+    <label for="stu_branch">Stu Branch</label>
+    <select id="stu_branch" name="stu_branch">
+        <option value="{{data.stu_branch.stu_branch}}">{{data.stu_branch.stu_branch}}</option>
+      {% for data2 in branch_data%}
+        <option value="{{data2.stu_branch}}">{{data2.stu_branch}}</option>
+      {% endfor %}
+    </select>
+    <input type="submit" value="Submit">
+  </form>
+</div>
+{% endif %}
+</body>
+</html>
+
+

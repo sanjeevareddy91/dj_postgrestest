@@ -1,0 +1,10 @@
+Django==3.2
+pytz
+psycopg2 --no-binary psycopg2
+boto3
+django-storages
+python-decouple
+asgiref
+backports.zoneinfo
+sqlparse
+tzdata
